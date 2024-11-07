@@ -51,24 +51,18 @@ features, labels = load_data(positive_dir, negative_dir)
 #split data in training and testing
 X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.1, random_state=42)
 
-#training  2 models one is randon forest classifier the other supported vector machine
+#training the model
 clf = RandomForestClassifier()
 clf.fit(X_train, y_train)
 
-svm = SVC(kernel='rbf')
-svm.fit(X_train, y_train)
+
 
 accuracy = clf.score(X_test, y_test)
-accuracy_svm=svm.score(X_test,y_test)
 print(f'Accuratezza clf: {accuracy * 100:.2f}%')
-print(f'Accuratezza svm: {accuracy_svm * 100:.2f}%')
 
 predict_sound("audio_neg.wav",clf)
-predict_sound("audio_neg.wav",svm)
 
-#saving the 2 models
+#saving the model
 joblib.dump(clf, 'modello_minecraft_clf.pkl')
-joblib.dump(svm, 'modello_minecraft_svm.pkl')
 
 print("Modello salvato come modello_minecraft_clf.pkl")
-print("Modello salvato come modello_minecraft_svm.pkl")

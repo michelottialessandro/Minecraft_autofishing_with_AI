@@ -12,13 +12,10 @@ positive_dir = r'C:\Users\Utente\Documents\development\wakeword_learning\file_au
 negative_dir = r'C:\Users\Utente\Documents\development\wakeword_learning\file_audio_neg' 
 
 clf = joblib.load('modello_minecraft_clf.pkl')
-model = joblib.load('modello_minecraft_svm.pkl')
 
 list_neg_clf=[]
-list_neg_smv=[]
 
 list_pos_clf=[]
-list_pos_svm=[]
 
 def extract_features(file_path):
     y, sr = librosa.load(file_path, sr=None)
@@ -42,38 +39,25 @@ for i in range(iteration):
     path="pos_sample"+str(i)+".wav"
     file_path = os.path.join(positive_dir, path)
     list_pos_clf.append(predict_sound(file_path,clf))
-    list_pos_svm.append(predict_sound(file_path,model))
 
 for i in range(iteration):
     path="neg_sample"+str(i)+".wav"
     file_path = os.path.join(negative_dir, path)
     list_neg_clf.append(predict_sound(file_path,clf))
-    list_neg_smv.append(predict_sound(file_path,model))
     
 counter_right_clf0=0
-counter_right_svm0=0
 counter_right_clf1=0
-counter_right_svm1=0
 
 for el in list_neg_clf:
     if(el==0):
         counter_right_clf0=counter_right_clf0+1
-
-for el in list_neg_smv:
-    if(el==0):
-        counter_right_svm0=counter_right_svm0+1
         
 
 for el in list_pos_clf:
     if(el==1):
         counter_right_clf1=counter_right_clf1+1
 
-for el in list_pos_svm:
-    if(el==1):
-        counter_right_svm1=counter_right_svm1+1
 
 
 print(f"correttezza su dateset positivo clf: {(counter_right_clf1/iteration)*100}")
-print(f"correttezza su dateset positivo svm: {(counter_right_svm1/iteration)*100}")
 print(f"correttezza su dateset negativo clf: {(counter_right_clf0/iteration)*100}")
-print(f"correttezza su dateset negativo svm: {(counter_right_svm0/iteration)*100}")
